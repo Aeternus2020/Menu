@@ -12,7 +12,7 @@ function CategoryGridTile({title, color, onPress}: CategoryGridTileProps    ) {
             <Pressable
                 style={({pressed}) => [
                     styles.button,
-                    pressed ? styles.buttonPresed : null
+                    pressed ? styles.buttonPressed : null
                 ]}
                 android_ripple={{color: "#ccc"}}
                 onPress={onPress}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     button: {
         flex: 1,
     },
-    buttonPresed: {
+    buttonPressed: {
       opacity: 0.5
     },
     innerContainer: {

@@ -1,14 +1,12 @@
-import { View, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import { RootStackParamList } from '../App';
 import {CATEGORIES, MEALS} from "../data/dummy-data";
-import Meal from "../models/meal";
-import MileItem from "../components/MileItem";
 import {useLayoutEffect} from "react";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import MealsList from "../components/MealsList";
 
 export type MealsOverviewRouteProp = RouteProp<RootStackParamList, 'MealsOverview'>;
-type NavProp = NativeStackNavigationProp<RootStackParamList, 'MealsOverview'>;
+export type NavProp = NativeStackNavigationProp<RootStackParamList, 'MealsOverview'>;
 
 export default function MealsOverviewScreen() {
     const navigation = useNavigation<NavProp>();
@@ -28,43 +26,11 @@ export default function MealsOverviewScreen() {
 
         navigation.setOptions({
             title: selectedCategory.title,
-            headerStyle: {backgroundColor: `${selectedCategory.color}B3`},
-            contentStyle: {backgroundColor: `${selectedCategory.color}E6`},
+            headerStyle: {backgroundColor: `${selectedCategory.color}E6`},
+            contentStyle: {backgroundColor: `${selectedCategory.color}B3`},
             headerTintColor: 'black',
         });
     }, [categoryId, navigation]);
 
-
-    const renderMealItem = ({ item }: ListRenderItemInfo<Meal>) => {
-        const mealItemProps = {
-            title: item.title,
-            imageUrl: item.imageUrl,
-            affordability: item.affordability,
-            complexity: item.complexity,
-            duration: item.duration
-        };
-        return (
-            <MileItem {...mealItemProps} />
-        );
-    }
-
-    return (
-        <View style={styles.container}>
-            <FlatList<Meal>
-                data={displayMeals}
-                keyExtractor={item => item.id}
-                renderItem={renderMealItem}
-            />
-        </View>
-    );
+    return <MealsList items={displayMeals} />
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-    },
-    mealTile: {
-        marginBottom: 12,
-    },
-});

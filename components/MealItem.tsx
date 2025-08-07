@@ -6,8 +6,12 @@ import {
     StyleSheet,
     Platform,
 } from 'react-native';
+import {useNavigation} from "@react-navigation/native";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../App";
 
 interface MealItemProps {
+    id: string;
     title: string;
     imageUrl: string;
     duration: number;
@@ -15,12 +19,21 @@ interface MealItemProps {
     affordability: string;
 }
 
-function MealItem({ title,  imageUrl, duration, complexity, affordability}: MealItemProps) {
+type MealItemNavProp = NativeStackNavigationProp<RootStackParamList>
+
+function MealItem({ id, title,  imageUrl, duration, complexity, affordability}: MealItemProps) {
+    const navigation = useNavigation<MealItemNavProp>()
+
     return (
         <View style={styles.mealItem}>
             <Pressable
                 android_ripple={{ color: '#ccc' }}
                 style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+                onPress={() =>
+                    navigation.navigate('MealDetail', {
+                        mealId: id,
+                    })
+                }
             >
                 <View style={styles.innerContainer}>
                     <View>
@@ -36,11 +49,11 @@ function MealItem({ title,  imageUrl, duration, complexity, affordability}: Meal
             </Pressable>
         </View>
     );
-};
+}
 
 export default MealItem;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     mealItem: {
         margin: 16,
         borderRadius: 8,
