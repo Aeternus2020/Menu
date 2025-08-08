@@ -85,7 +85,8 @@ export default function App() {
                             tabBarActiveTintColor: 'black',
                             tabBarInactiveTintColor: '#444',
                             tabBarStyle: { backgroundColor: '#e4b7ae' },
-                            tabBarIcon: ({ color, size, focused }) => {
+                            tabBarItemStyle: { overflow: 'hidden' },
+                            tabBarIcon: ({ color, size}) => {
                                 const name =
                                     route.name === 'CategoriesTab' ? 'list' : 'star';
                                 return <Ionicons name={name} color={color} size={size} />;

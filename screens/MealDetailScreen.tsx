@@ -6,6 +6,7 @@ import {useContext, useLayoutEffect} from "react"
 import {NavProp} from "./MealsOverviewScreen"
 import IconButton from "../components/IconButton"
 import {FavoritesContext} from "../store/context/favorites-context"
+import {Ionicons} from "@expo/vector-icons";
 
 type MealDetailRouteProp = RouteProp<CategoriesStackParamList, 'MealDetail'>
 
@@ -25,6 +26,13 @@ function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
         }
     }
 
+    const flags = [
+        { label: 'Gluten-free', on: !!selectedMeal?.isGlutenFree },
+        { label: 'Vegan',       on: !!selectedMeal?.isVegan },
+        { label: 'Vegetarian',  on: !!selectedMeal?.isVegetarian },
+        { label: 'Lactose-free',on: !!selectedMeal?.isLactoseFree },
+    ];
+
     useLayoutEffect(() => {
         navigation.setOptions({
             title: selectedMeal ? selectedMeal.title : 'Meal Detail',
@@ -37,7 +45,7 @@ function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
                 />
             }
         })
-    }, [navigation, changeFavoriteStatusHandler, selectedMeal])
+    }, [navigation, selectedMeal, color, mealsFavorite, changeFavoriteStatusHandler])
 
     return (
         <ScrollView style={styles.rootContainer}>
@@ -50,15 +58,25 @@ function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
                         <Text style={styles.detailItem}>{selectedMeal?.complexity}</Text>
                         <Text style={styles.detailItem}>{selectedMeal?.affordability}</Text>
                     </View>
+                    <View style={styles.details}>
+                        {flags.filter(f => f.on).map(f => (
+                            <View key={f.label} style={styles.badge}>
+                                <Ionicons name="checkmark" size={18} color="#2e7d32" style={{ marginRight: 2 }} />
+                                <Text style={styles.badgeText}>{f.label}</Text>
+                            </View>
+                        ))}
+                    </View>
                     <View style={styles.listContainer}>
                         <Text style={styles.subtitle}>Ingredients:</Text>
                         {selectedMeal?.ingredients && (selectedMeal?.ingredients.map((ingredient) => (
-                            <Text key={ingredient}>{ingredient}</Text>
+                            <Text key={ingredient} style={styles.stepItem}>{ingredient}</Text>
                         )))}
                         <Text style={styles.subtitle}>Steps:</Text>
-                        {selectedMeal?.steps && (selectedMeal?.steps.map((step) => (
-                            <Text key={step}>{step}</Text>
-                        )))}
+                        {selectedMeal?.steps?.map((step, idx) => (
+                            <Text key={`step-${idx}`} style={styles.stepItem}>
+                                {idx + 1}. {step}
+                            </Text>
+                        ))}
                     </View>
                 </View>
             </View>
@@ -71,7 +89,7 @@ export default MealDetailScreen
 export const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        marginBottom: 32,
+        marginBottom: 4,
     },
     innerContainer: {
         borderRadius: 8,
@@ -96,19 +114,35 @@ export const styles = StyleSheet.create({
     },
     detailItem: {
         marginHorizontal: 4,
-        fontSize: 12,
+        fontSize: 14,
+        fontStyle: 'italic',
+    },
+    stepItem: {
+        fontSize: 14,
+        lineHeight: 20,
+        marginVertical: 2,
     },
     subtitle: {
-        color: 'white',
+        color: 'black',
         fontSize: 18,
         fontWeight: 'bold',
         margin: 4,
         padding: 6,
-        textAlign: 'center',
     },
     listContainer: {
         width: '90%'
-    }
+    },
+    badge: {
+        flexDirection:'row',
+        alignItems:'center',
+        paddingHorizontal: 10,
+        paddingVertical: 4
+    },
+    badgeText:{
+        fontSize:12,
+        color:'#2e7d32',
+        fontWeight:'600'
+    },
 })
 
 
