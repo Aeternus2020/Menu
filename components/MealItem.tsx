@@ -5,23 +5,24 @@ import {
     Image,
     StyleSheet,
     Platform,
-} from 'react-native';
-import {useNavigation} from "@react-navigation/native";
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {RootStackParamList} from "../App";
+} from 'react-native'
+import {useNavigation} from "@react-navigation/native"
+import {NativeStackNavigationProp} from "@react-navigation/native-stack"
+import {CategoriesStackParamList} from "../App"
 
 interface MealItemProps {
-    id: string;
-    title: string;
-    imageUrl: string;
-    duration: number;
-    complexity: string;
-    affordability: string;
+    id: string
+    title: string
+    imageUrl: string
+    duration: number
+    complexity: string
+    affordability: string
+    accentColor?: string
 }
 
-type MealItemNavProp = NativeStackNavigationProp<RootStackParamList>
+type MealItemNavProp = NativeStackNavigationProp<CategoriesStackParamList>
 
-function MealItem({ id, title,  imageUrl, duration, complexity, affordability}: MealItemProps) {
+function MealItem({ id, title,  imageUrl, duration, complexity, affordability, accentColor}: MealItemProps) {
     const navigation = useNavigation<MealItemNavProp>()
 
     return (
@@ -32,6 +33,7 @@ function MealItem({ id, title,  imageUrl, duration, complexity, affordability}: 
                 onPress={() =>
                     navigation.navigate('MealDetail', {
                         mealId: id,
+                        color: accentColor ?? '#ffffff',
                     })
                 }
             >
@@ -48,10 +50,10 @@ function MealItem({ id, title,  imageUrl, duration, complexity, affordability}: 
                 </View>
             </Pressable>
         </View>
-    );
+    )
 }
 
-export default MealItem;
+export default MealItem
 
 export const styles = StyleSheet.create({
     mealItem: {
@@ -92,4 +94,4 @@ export const styles = StyleSheet.create({
         marginHorizontal: 4,
         fontSize: 12,
     },
-});
+})

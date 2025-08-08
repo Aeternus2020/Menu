@@ -1,15 +1,15 @@
-import React from 'react';
-import { FlatList } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../App';
-import { CATEGORIES } from '../data/dummy-data';
-import CategoryGridTile from '../components/CategoryGridTile';
+import React from 'react'
+import { FlatList } from 'react-native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
+import { CategoriesStackParamList } from '../App'
+import { CATEGORIES } from '../data/dummy-data'
+import CategoryGridTile from '../components/CategoryGridTile'
 
-type NavProp = NativeStackNavigationProp<RootStackParamList, 'MealsCategories'>;
+type NavProp = NativeStackNavigationProp<CategoriesStackParamList, 'MealsCategories'>
 
 const CategoriesScreen: React.FC = () => {
-    const navigation = useNavigation<NavProp>();
+    const navigation = useNavigation<NavProp>()
 
     return (
         <FlatList
@@ -23,12 +23,14 @@ const CategoriesScreen: React.FC = () => {
                     onPress={() =>
                         navigation.navigate('MealsOverview', {
                             categoryId: item.id,
+                            color: item.color,
+                            title: item.title,
                         })
                     }
                 />
             )}
         />
-    );
-};
+    )
+}
 
-export default CategoriesScreen;
+export default CategoriesScreen

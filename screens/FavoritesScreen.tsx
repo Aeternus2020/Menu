@@ -1,8 +1,8 @@
-import {StyleSheet, Text, View} from "react-native";
-import {useContext} from "react";
-import {FavoritesContext} from "../store/context/favorites-context";
-import {MEALS} from "../data/dummy-data";
-import MealsList from "../components/MealsList";
+import {StyleSheet, Text, View} from "react-native"
+import {useContext} from "react"
+import {FavoritesContext} from "../store/context/favorites-context"
+import {MEALS} from "../data/dummy-data"
+import MealsList from "../components/MealsList"
 
 function FavoritesScreen () {
     const favoriteMealsCtx = useContext(FavoritesContext)
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
     }
-});
+})

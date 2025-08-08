@@ -1,4 +1,4 @@
-import {Platform, Pressable, StyleSheet, Text, View} from "react-native";
+import {Platform, Pressable, StyleSheet, Text, View} from "react-native"
 
 interface CategoryGridTileProps {
     title: string,
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 18,
     }
-});
+})

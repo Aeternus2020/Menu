@@ -1,75 +1,118 @@
-import CategoriesScreen from "./screens/CategoriesScreen";
-import {StatusBar} from "expo-status-bar";
-import {NavigationContainer} from "@react-navigation/native";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import MealsOverviewScreen from "./screens/MealsOverviewScreen";
-import MealDetailScreen from "./screens/MealDetailScreen";
-import {createDrawerNavigator} from "@react-navigation/drawer";
-import FavoritesScreen from "./screens/FavoritesScreen";
-import {Ionicons} from "@expo/vector-icons";
-import FavoritesContextProvider from "./store/context/favorites-context";
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
-export type RootStackParamList = {
-    MealsCategories: undefined
-    MealsOverview: { categoryId: string }
-    MealDetail: { mealId: string }
+import FavoritesContextProvider from './store/context/favorites-context';
+import CategoriesScreen from './screens/CategoriesScreen';
+import MealsOverviewScreen from './screens/MealsOverviewScreen';
+import MealDetailScreen from './screens/MealDetailScreen';
+import FavoritesScreen from './screens/FavoritesScreen';
+
+export type CategoriesStackParamList = {
+    MealsCategories: undefined;
+    MealsOverview: { categoryId: string; color: string; title: string };
+    MealDetail:     { mealId: string;  color?: string; title?: string };
+};
+
+export type FavoritesStackParamList = {
+    Favorites: undefined;
+    MealDetail: { mealId: string };
+};
+
+const CategoriesStack = createNativeStackNavigator<CategoriesStackParamList>();
+const FavoritesStack  = createNativeStackNavigator<FavoritesStackParamList>();
+const Tab = createBottomTabNavigator();
+
+function CategoriesStackNavigator() {
+    return (
+        <CategoriesStack.Navigator
+            screenOptions={{
+                headerStyle: { backgroundColor: '#e4b7ae' },
+                headerTintColor: 'black',
+                contentStyle: { backgroundColor: '#d4948f' },
+            }}
+        >
+            <CategoriesStack.Screen
+                name="MealsCategories"
+                component={CategoriesScreen}
+                options={{ title: 'All Categories' }}
+            />
+            <CategoriesStack.Screen
+                name="MealsOverview"
+                component={MealsOverviewScreen}
+            />
+            <CategoriesStack.Screen
+                name="MealDetail"
+                component={MealDetailScreen}
+            />
+        </CategoriesStack.Navigator>
+    );
 }
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Drawer = createDrawerNavigator()
-
-function  DrawerNavigator() {
-    return(
-        <Drawer.Navigator
+function FavoritesStackNavigator() {
+    return (
+        <FavoritesStack.Navigator
             screenOptions={{
-                headerStyle: {backgroundColor: '#e4b7ae'},
+                headerStyle: { backgroundColor: '#e4b7ae' },
                 headerTintColor: 'black',
-                sceneStyle: {backgroundColor: '#d4948f'},
-                drawerContentStyle: {backgroundColor: '#e4b7ae'},
-                drawerInactiveTintColor: 'black',
-                drawerActiveTintColor: 'white',
-                drawerActiveBackgroundColor: '#d4948f',
-            }}>
-            <Drawer.Screen
-                name="Categories"
-                component={CategoriesScreen}
-                options={{
-                    title: "All categories",
-                    drawerIcon: ({ color, size }) => (
-                        <Ionicons name='list' color={color} size={size} />
-                    )
-                }}
-            />
-            <Drawer.Screen
+                contentStyle: { backgroundColor: '#d4948f' },
+            }}
+        >
+            <FavoritesStack.Screen
                 name="Favorites"
                 component={FavoritesScreen}
-                options={{
-                    drawerIcon: ({ color, size }) => (
-                        <Ionicons name='star' color={color} size={size} />
-                    )
-                }}
             />
-        </Drawer.Navigator>
-    )
+            <FavoritesStack.Screen
+                name="MealDetail"
+                component={MealDetailScreen}
+            />
+        </FavoritesStack.Navigator>
+    );
 }
 
 export default function App() {
-  return (
-      <>
-        <StatusBar style="dark" />
-          <FavoritesContextProvider>
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="MealsCategories"
-                        component={DrawerNavigator}
-                        options={{headerShown: false}}
-                    />
-                    <Stack.Screen name="MealsOverview" component={MealsOverviewScreen} />
-                    <Stack.Screen name="MealDetail" component={MealDetailScreen} />
-                </Stack.Navigator>
-            </NavigationContainer>
-          </FavoritesContextProvider>
-      </>
-  )
+    return (
+        <>
+            <StatusBar style="dark" />
+            <FavoritesContextProvider>
+                <NavigationContainer>
+                    <Tab.Navigator
+                        screenOptions={({ route }) => ({
+                            headerShown: false,
+                            tabBarActiveTintColor: 'black',
+                            tabBarInactiveTintColor: '#444',
+                            tabBarStyle: { backgroundColor: '#e4b7ae' },
+                            tabBarIcon: ({ color, size, focused }) => {
+                                const name =
+                                    route.name === 'CategoriesTab' ? 'list' : 'star';
+                                return <Ionicons name={name} color={color} size={size} />;
+                            },
+                            tabBarLabel:
+                                route.name === 'CategoriesTab' ? 'Categories' : 'Favorites',
+                        })}
+                    >
+                        <Tab.Screen
+                            name="CategoriesTab"
+                            component={CategoriesStackNavigator}
+                            options={{
+                                popToTopOnBlur: true,
+                                tabBarLabel: 'Categories',
+                            }}
+                        />
+                        <Tab.Screen
+                            name="FavoritesTab"
+                            component={FavoritesStackNavigator}
+                            options={{
+                                popToTopOnBlur: true,
+                                tabBarLabel: 'Favorites',
+                            }}
+                        />
+                    </Tab.Navigator>
+                </NavigationContainer>
+            </FavoritesContextProvider>
+        </>
+    );
 }

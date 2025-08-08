@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet} from "react-native";
+import {Pressable, StyleSheet} from "react-native"
 import {Ionicons} from '@expo/vector-icons'
 
 type IoniconName = keyof typeof Ionicons.glyphMap
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
     pressed: {
         opacity: 0.7,
     }
-});
+})

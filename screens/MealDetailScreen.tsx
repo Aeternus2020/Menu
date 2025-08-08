@@ -1,16 +1,16 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import { RootStackParamList } from '../App';
-import {MEALS} from "../data/dummy-data";
-import {useContext, useLayoutEffect} from "react";
-import {NavProp} from "./MealsOverviewScreen";
-import IconButton from "../components/IconButton";
-import {FavoritesContext} from "../store/context/favorites-context";
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native'
+import {RouteProp, useNavigation} from '@react-navigation/native'
+import { CategoriesStackParamList } from '../App'
+import {MEALS} from "../data/dummy-data"
+import {useContext, useLayoutEffect} from "react"
+import {NavProp} from "./MealsOverviewScreen"
+import IconButton from "../components/IconButton"
+import {FavoritesContext} from "../store/context/favorites-context"
 
-type MealDetailRouteProp = RouteProp<RootStackParamList, 'MealDetail'>;
+type MealDetailRouteProp = RouteProp<CategoriesStackParamList, 'MealDetail'>
 
 function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
-    const { mealId } = route.params
+    const { mealId, color } = route.params
     const navigation = useNavigation<NavProp>()
     const favoritesMealsCtx = useContext(FavoritesContext)
 
@@ -28,6 +28,8 @@ function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
     useLayoutEffect(() => {
         navigation.setOptions({
             title: selectedMeal ? selectedMeal.title : 'Meal Detail',
+            headerStyle:  { backgroundColor: `${color}E6` },
+            contentStyle: { backgroundColor: `${color}B3` },
             headerRight: () => {
                 return <IconButton icon={mealsFavorite ? 'star' : 'star-outline'}
                                    color='red'
@@ -64,7 +66,7 @@ function MealDetailScreen({ route }: { route: MealDetailRouteProp }) {
     )
 }
 
-export default MealDetailScreen;
+export default MealDetailScreen
 
 export const styles = StyleSheet.create({
     rootContainer: {
@@ -107,6 +109,6 @@ export const styles = StyleSheet.create({
     listContainer: {
         width: '90%'
     }
-});
+})
 
 
